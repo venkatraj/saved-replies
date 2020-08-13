@@ -20,36 +20,34 @@ var Product = function Product(props) {
   }, /*#__PURE__*/React.createElement("h4", null, props.name), /*#__PURE__*/React.createElement("p", null, props.price));
 };
 
-var Buttons = function Buttons() {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "Quantity: 0"), /*#__PURE__*/React.createElement("button", null, "+"), /*#__PURE__*/React.createElement("button", null, "-"));
-}; // const Checkout = (props) => (
-//   <div id="container">
-//     <Product name={products[0].name} price={products[0].price} />
-//     <Buttons />
-//     <Product name={products[1].name} price={products[1].price} />
-//     <Buttons />
-//     <Product name={products[2].name} price={products[1].price} />
-//     <Buttons />
-//   </div>
-// );
-// const Checkout = (props) => (
-//   <div id="container">
-//     {/* JSX needs one parent */}
-//     {products.length > 0 &&
-//       products.map((product) => (
-//         <div>
-//           <Product name={product.name} price={product.price} />
-//           <Buttons />
-//         </div>
-//       ))}
-//   </div>
-// );
+var handleInr = function handleInr() {
+  console.log('incremented by one');
+  qty++;
+  reRender();
+};
 
+var handleDecr = function handleDecr() {
+  console.log('decremented by one');
+  qty--;
+  reRender();
+};
+
+var qty = 0;
+
+var Buttons = function Buttons() {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "Quantity: ", qty), /*#__PURE__*/React.createElement("button", {
+    onClick: handleInr
+  }, "+"), /*#__PURE__*/React.createElement("button", {
+    onClick: handleDecr
+  }, "-"));
+};
 
 var Products = function Products(props) {
   return /*#__PURE__*/React.createElement("div", null, products.length > 0 && products.map(function (product, index) {
-    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Product, {
-      key: index,
+    return /*#__PURE__*/React.createElement("div", {
+      key: index
+    }, /*#__PURE__*/React.createElement(Product, {
+      key: product.name,
       name: product.name,
       price: product.price
     }), /*#__PURE__*/React.createElement(Buttons, {
@@ -65,4 +63,9 @@ var Checkout = function Checkout(props) {
 };
 
 var root = document.getElementById('root');
-ReactDOM.render( /*#__PURE__*/React.createElement(Checkout, null), root);
+
+var reRender = function reRender() {
+  ReactDOM.render( /*#__PURE__*/React.createElement(Checkout, null), root);
+};
+
+reRender();

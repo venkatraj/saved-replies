@@ -25,46 +25,40 @@ const Product = (props) => {
   );
 };
 
+const handleInr = () => {
+  console.log('incremented by one');
+  qty++;
+  reRender();
+};
+
+const handleDecr = () => {
+  console.log('decremented by one');
+  qty--;
+  reRender();
+};
+
+let qty = 0;
+
 const Buttons = () => {
   return (
     <div>
-      <span>Quantity: 0</span>
-      <button>+</button>
-      <button>-</button>
+      <span>Quantity: {qty}</span>
+      <button onClick={handleInr}>+</button>
+      <button onClick={handleDecr}>-</button>
     </div>
   );
 };
-
-// const Checkout = (props) => (
-//   <div id="container">
-//     <Product name={products[0].name} price={products[0].price} />
-//     <Buttons />
-//     <Product name={products[1].name} price={products[1].price} />
-//     <Buttons />
-//     <Product name={products[2].name} price={products[1].price} />
-//     <Buttons />
-//   </div>
-// );
-
-// const Checkout = (props) => (
-//   <div id="container">
-//     {/* JSX needs one parent */}
-//     {products.length > 0 &&
-//       products.map((product) => (
-//         <div>
-//           <Product name={product.name} price={product.price} />
-//           <Buttons />
-//         </div>
-//       ))}
-//   </div>
-// );
 
 const Products = (props) => (
   <div>
     {products.length > 0 &&
       products.map((product, index) => (
-        <div>
-          <Product key={index} name={product.name} price={product.price} />
+        <div key={index}>
+          <Product
+            key={product.name}
+            name={product.name}
+            price={product.price}
+          />
           <Buttons key={index} />
         </div>
       ))}
@@ -79,4 +73,8 @@ const Checkout = (props) => (
 
 const root = document.getElementById('root');
 
-ReactDOM.render(<Checkout />, root);
+const reRender = () => {
+  ReactDOM.render(<Checkout />, root);
+};
+
+reRender();
