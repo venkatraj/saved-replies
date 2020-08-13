@@ -25,29 +25,40 @@ const Product = (props) => {
   );
 };
 
-const handleInr = () => {
-  console.log('incremented by one');
-  qty++;
-  reRender();
-};
+class Buttons extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      qty: 0,
+    };
+    this.handleInr = this.handleInr.bind(this);
+    this.handleDecr = this.handleDecr.bind(this);
+  }
 
-const handleDecr = () => {
-  console.log('decremented by one');
-  qty--;
-  reRender();
-};
+  handleInr() {
+    // console.log('incremented by one');
+    this.setState((prevState) => ({
+      qty: prevState.qty + 1,
+    }));
+  }
 
-let qty = 0;
+  handleDecr() {
+    // console.log('decremented by one');
+    this.setState((prevState) => ({
+      qty: prevState.qty - 1,
+    }));
+  }
 
-const Buttons = () => {
-  return (
-    <div>
-      <span>Quantity: {qty}</span>
-      <button onClick={handleInr}>+</button>
-      <button onClick={handleDecr}>-</button>
-    </div>
-  );
-};
+  render() {
+    return (
+      <div>
+        <span>Quantity: {this.state.qty}</span>
+        <button onClick={this.handleInr}>+</button>
+        <button onClick={this.handleDecr}>-</button>
+      </div>
+    );
+  }
+}
 
 const Products = (props) => (
   <div>
