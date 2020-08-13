@@ -1,49 +1,82 @@
-// const name = 'Vue';
+const products = [
+  {
+    id: 1,
+    name: 'Product1',
+    price: '25.00',
+  },
+  {
+    id: 2,
+    name: 'Product2',
+    price: '375.00',
+  },
+  {
+    id: 3,
+    name: 'Product3',
+    price: '789.00',
+  },
+];
 
-const subject = {
-  name: 'React',
-  description: 'A JavaScript library for building user interfaces',
+const Product = (props) => {
+  return (
+    <div className="product">
+      <h4>{props.name}</h4>
+      <p>{props.price}</p>
+    </div>
+  );
 };
 
-// Exercise, to that for Angular or Vue
-
-// https://randomuser.me/photos
-const person = {
-  firstName: 'Venkat',
-  lastName: 'Raj',
-  profilePic: 'https://randomuser.me/api/portraits/men/66.jpg',
+const Buttons = () => {
+  return (
+    <div>
+      <span>Quantity: 0</span>
+      <button>+</button>
+      <button>-</button>
+    </div>
+  );
 };
 
-const formatName = (person) => {
-  return `${person.firstName} ${person.lastName}`;
-};
-
-// const el = (
-//   <div id="content">
-//     <h1>Hello, {subject.name}</h1>
-//     <p>{subject.description}</p>
+// const Checkout = (props) => (
+//   <div id="container">
+//     <Product name={products[0].name} price={products[0].price} />
+//     <Buttons />
+//     <Product name={products[1].name} price={products[1].price} />
+//     <Buttons />
+//     <Product name={products[2].name} price={products[1].price} />
+//     <Buttons />
 //   </div>
 // );
 
-// functions are expressions.
-// Element attribute values can be an expression
-// const el = (
-//   <div id="person">
-//     <h1>Hello, {formatName(person)}</h1>
-//     <img src={person.profilePic} alt="That is not me!" />
+// const Checkout = (props) => (
+//   <div id="container">
+//     {/* JSX needs one parent */}
+//     {products.length > 0 &&
+//       products.map((product) => (
+//         <div>
+//           <Product name={product.name} price={product.price} />
+//           <Buttons />
+//         </div>
+//       ))}
 //   </div>
 // );
 
-// Even jsx itself is an expression
-const getGreeting = () => <h1>Hello, {formatName(person)}</h1>;
+const Products = (props) => (
+  <div>
+    {products.length > 0 &&
+      products.map((product, index) => (
+        <div>
+          <Product key={index} name={product.name} price={product.price} />
+          <Buttons key={index} />
+        </div>
+      ))}
+  </div>
+);
 
-const el = (
-  <div id="person">
-    {getGreeting()}
-    <img src={person.profilePic} alt="That is not me!" />
+const Checkout = (props) => (
+  <div id="container">
+    <Products />
   </div>
 );
 
 const root = document.getElementById('root');
 
-ReactDOM.render(el, root);
+ReactDOM.render(<Checkout />, root);
