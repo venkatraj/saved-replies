@@ -2,17 +2,17 @@ const products = [
   {
     id: 1,
     name: 'Product1',
-    price: '25.00',
+    price: 25.0,
   },
   {
     id: 2,
     name: 'Product2',
-    price: '375.00',
+    price: 375.0,
   },
   {
     id: 3,
     name: 'Product3',
-    price: '789.00',
+    price: 789.0,
   },
 ];
 
@@ -25,40 +25,17 @@ const Product = (props) => {
   );
 };
 
-class Buttons extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      qty: 0,
-    };
-    this.handleInr = this.handleInr.bind(this);
-    this.handleDecr = this.handleDecr.bind(this);
-  }
-
-  handleInr() {
-    // console.log('incremented by one');
-    this.setState((prevState) => ({
-      qty: prevState.qty + 1,
-    }));
-  }
-
-  handleDecr() {
-    // console.log('decremented by one');
-    this.setState((prevState) => ({
-      qty: prevState.qty - 1,
-    }));
-  }
-
-  render() {
-    return (
-      <div>
-        <span>Quantity: {this.state.qty}</span>
-        <button onClick={this.handleInr}>+</button>
-        <button onClick={this.handleDecr}>-</button>
-      </div>
-    );
-  }
-}
+const Buttons = (props) => (
+  <div>
+    <span>Quantity: {props.quantities[props.qtyIndex]}</span>
+    <button value={props.qtyIndex} onClick={props.handleInr}>
+      +
+    </button>
+    <button value={props.qtyIndex} onClick={props.handleDecr}>
+      -
+    </button>
+  </div>
+);
 
 const Products = (props) => (
   <div>
@@ -70,22 +47,68 @@ const Products = (props) => (
             name={product.name}
             price={product.price}
           />
-          <Buttons key={index} />
+          <Buttons
+            key={index}
+            qtyIndex={index}
+            handleInr={props.handleInr}
+            handleDecr={props.handleDecr}
+            quantities={props.quantities}
+          />
         </div>
       ))}
   </div>
 );
 
-const Checkout = (props) => (
-  <div id="container">
-    <Products />
-  </div>
-);
+class Checkout extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      quantities: [0, 0, 0],
+      totalAmount: 0,
+    };
+    this.handleInr = this.handleInr.bind(this);
+    this.handleDecr = this.handleDecr.bind(this);
+  }
+
+  handleInr(e) {
+    e.preventDefault();
+    const qtyIndex = e.target.value;
+    this.setState((prevState) => {
+      prevState.quantities[qtyIndex] += 1;
+      return {
+        quantities: prevState.quantities,
+        totalAmount: prevState.totalAmount + products[qtyIndex].price,
+      };
+    });
+  }
+
+  handleDecr(e) {
+    e.preventDefault();
+    const qtyIndex = e.target.value;
+
+    this.setState((prevState) => {
+      prevState.quantities[qtyIndex] += 1;
+      return {
+        quantities: prevState.quantities,
+        totalAmount: prevState.totalAmount - products[qtyIndex].price,
+      };
+    });
+  }
+
+  render() {
+    return (
+      <div id="container">
+        <h3>Total Amount: {this.state.totalAmount}</h3>
+        <Products
+          handleInr={this.handleInr}
+          handleDecr={this.handleDecr}
+          quantities={this.state.quantities}
+        />
+      </div>
+    );
+  }
+}
 
 const root = document.getElementById('root');
 
-const reRender = () => {
-  ReactDOM.render(<Checkout />, root);
-};
-
-reRender();
+ReactDOM.render(<Checkout />, root);

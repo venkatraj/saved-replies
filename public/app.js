@@ -25,15 +25,15 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 var products = [{
   id: 1,
   name: 'Product1',
-  price: '25.00'
+  price: 25.0
 }, {
   id: 2,
   name: 'Product2',
-  price: '375.00'
+  price: 375.0
 }, {
   id: 3,
   name: 'Product3',
-  price: '789.00'
+  price: 789.0
 }];
 
 var Product = function Product(props) {
@@ -42,58 +42,15 @@ var Product = function Product(props) {
   }, /*#__PURE__*/React.createElement("h4", null, props.name), /*#__PURE__*/React.createElement("p", null, props.price));
 };
 
-var Buttons = /*#__PURE__*/function (_React$Component) {
-  _inherits(Buttons, _React$Component);
-
-  var _super = _createSuper(Buttons);
-
-  function Buttons(props) {
-    var _this;
-
-    _classCallCheck(this, Buttons);
-
-    _this = _super.call(this, props);
-    _this.state = {
-      qty: 0
-    };
-    _this.handleInr = _this.handleInr.bind(_assertThisInitialized(_this));
-    _this.handleDecr = _this.handleDecr.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Buttons, [{
-    key: "handleInr",
-    value: function handleInr() {
-      // console.log('incremented by one');
-      this.setState(function (prevState) {
-        return {
-          qty: prevState.qty + 1
-        };
-      });
-    }
-  }, {
-    key: "handleDecr",
-    value: function handleDecr() {
-      // console.log('decremented by one');
-      this.setState(function (prevState) {
-        return {
-          qty: prevState.qty - 1
-        };
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "Quantity: ", this.state.qty), /*#__PURE__*/React.createElement("button", {
-        onClick: this.handleInr
-      }, "+"), /*#__PURE__*/React.createElement("button", {
-        onClick: this.handleDecr
-      }, "-"));
-    }
-  }]);
-
-  return Buttons;
-}(React.Component);
+var Buttons = function Buttons(props) {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "Quantity: ", props.quantities[props.qtyIndex]), /*#__PURE__*/React.createElement("button", {
+    value: props.qtyIndex,
+    onClick: props.handleInr
+  }, "+"), /*#__PURE__*/React.createElement("button", {
+    value: props.qtyIndex,
+    onClick: props.handleDecr
+  }, "-"));
+};
 
 var Products = function Products(props) {
   return /*#__PURE__*/React.createElement("div", null, products.length > 0 && products.map(function (product, index) {
@@ -104,21 +61,76 @@ var Products = function Products(props) {
       name: product.name,
       price: product.price
     }), /*#__PURE__*/React.createElement(Buttons, {
-      key: index
+      key: index,
+      qtyIndex: index,
+      handleInr: props.handleInr,
+      handleDecr: props.handleDecr,
+      quantities: props.quantities
     }));
   }));
 };
 
-var Checkout = function Checkout(props) {
-  return /*#__PURE__*/React.createElement("div", {
-    id: "container"
-  }, /*#__PURE__*/React.createElement(Products, null));
-};
+var Checkout = /*#__PURE__*/function (_React$Component) {
+  _inherits(Checkout, _React$Component);
+
+  var _super = _createSuper(Checkout);
+
+  function Checkout(props) {
+    var _this;
+
+    _classCallCheck(this, Checkout);
+
+    _this = _super.call(this, props);
+    _this.state = {
+      quantities: [0, 0, 0],
+      totalAmount: 0
+    };
+    _this.handleInr = _this.handleInr.bind(_assertThisInitialized(_this));
+    _this.handleDecr = _this.handleDecr.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(Checkout, [{
+    key: "handleInr",
+    value: function handleInr(e) {
+      e.preventDefault();
+      var qtyIndex = e.target.value;
+      this.setState(function (prevState) {
+        prevState.quantities[qtyIndex] += 1;
+        return {
+          quantities: prevState.quantities,
+          totalAmount: prevState.totalAmount + products[qtyIndex].price
+        };
+      });
+    }
+  }, {
+    key: "handleDecr",
+    value: function handleDecr(e) {
+      e.preventDefault();
+      var qtyIndex = e.target.value;
+      this.setState(function (prevState) {
+        prevState.quantities[qtyIndex] += 1;
+        return {
+          quantities: prevState.quantities,
+          totalAmount: prevState.totalAmount - products[qtyIndex].price
+        };
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React.createElement("div", {
+        id: "container"
+      }, /*#__PURE__*/React.createElement("h3", null, "Total Amount: ", this.state.totalAmount), /*#__PURE__*/React.createElement(Products, {
+        handleInr: this.handleInr,
+        handleDecr: this.handleDecr,
+        quantities: this.state.quantities
+      }));
+    }
+  }]);
+
+  return Checkout;
+}(React.Component);
 
 var root = document.getElementById('root');
-
-var reRender = function reRender() {
-  ReactDOM.render( /*#__PURE__*/React.createElement(Checkout, null), root);
-};
-
-reRender();
+ReactDOM.render( /*#__PURE__*/React.createElement(Checkout, null), root);
